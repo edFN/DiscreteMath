@@ -144,11 +144,7 @@ class MainForm(Frame):
         sum = segment_plus(first_set1,second_set1)
         self.lbl_sum.config(text = f"A|B = {str(sum)}")
         sub = segment_sub(first_set1,second_set1)
-        if(sub != None):
-            self.lbl_sub.config(text=f"A\B = {str(sub)}")
-        else:
-            self.lbl_sub.config(text=f"A\B = 0")
-            
+        self.lbl_sub.config(text=f"A\B = {str(sub)}")
 
         for item in inter.line_segments:
             self.make_crosses(item.p1.x,item.p2.x)

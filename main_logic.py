@@ -38,6 +38,8 @@ class Point:
         sc = other if isinstance(other, float) else other.x
 
         return self.x > sc
+    def __str__(self):
+        return "Lol"
 
     def __ge__(self, other):
         if not isinstance(other, (float, Point)):
@@ -235,21 +237,22 @@ def segment_plus(set1: LineSegmentSet, set2: LineSegmentSet) -> LineSegmentSet:
                     connected.append(LineSegment(item2.p1, item.p2))
                 else:
                     plus.add(item2)
-            init = False
-            min_a = None
-            max_a = None
-            for con in connected:
-                if not init:
-                    min_a = con.p1
-                    max_a = con.p2
-                    init = True
-                else:
-                    if min_a > con.p1:
+            if(len(connected) > 0):
+                init = False
+                min_a = None
+                max_a = None
+                for con in connected:
+                    if not init:
                         min_a = con.p1
-                    if max_a < con.p2:
                         max_a = con.p2
+                        init = True
+                    else:
+                        if min_a > con.p1:
+                            min_a = con.p1
+                        if max_a < con.p2:
+                            max_a = con.p2
 
-            plus.add(LineSegment(min_a, max_a))
+                plus.add(LineSegment(min_a, max_a))
 
     arr = list(plus.line_segments)
     item = arr[0]
@@ -273,11 +276,12 @@ def segment_sub(set1: LineSegmentSet, set2: LineSegmentSet):
         for item2 in set2.line_segments:
             if is_subset(item, item2):
                 temp.append(LineSegment(item.p1, Point(item2.p1.x, True)))
-                temp.append(LineSegment(Point(item2.p1, True), item.p2))
+                temp.append(LineSegment(Point(item2.p2.x, True), item.p2))
                 g = False
             elif is_subset(item2,item):
+                temp = []
                 g = False
-                continue
+                break
             elif has_point(item, item2.p1):
                 temp.append(LineSegment(item.p1, Point(item2.p1.x, True)))
                 g = False
@@ -293,6 +297,8 @@ def segment_sub(set1: LineSegmentSet, set2: LineSegmentSet):
             for i in range(1, len(temp)):
                 if intersect_line(x, temp[i]) is not None:
                     x = intersect_line(x, temp[i])
+                else:
+                    sub.add(temp[i])
             sub.add(x)
     return sub
 
